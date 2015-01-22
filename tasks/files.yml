@@ -1,0 +1,6 @@
+---
+- name: write the dhcpd.conf
+  template: src=dhcpd.conf.j2 dest=/etc/dhcp/dhcpd.conf backup=yes
+  notify:
+    - validate dhcpd.conf
+    - restart dhcpd

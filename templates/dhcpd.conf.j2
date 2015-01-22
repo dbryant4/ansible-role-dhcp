@@ -1,0 +1,48 @@
+# Managed by Ansible
+default-lease-time 600;
+max-lease-time 7200;
+
+option subnet-mask {{ dhcp_subnet_mask }};
+option broadcast-address {{ 192.168.101.255 }};
+option routers {{ dhcp_router }};
+option domain-name-servers {{ dhcp_name_server }};
+option domain-search "{{ dhcp_domain }}";
+
+{% if dnssec_key is defined %}
+allow client-updates;
+ddns-update-style interim;
+update-static-leases on;
+option domain-name "{{ dhcp_domain }}";
+ddns-domainname "{{ dhcp_domain }}";
+
+key dhcpupdate {
+  algorithm hmac-md5;
+  secret {{ dnssec_key }};
+}
+
+zone {{ dhcp_reverse_zone_name }}.in-addr.arpa {
+  primary {{ dhcp_ddns_server }};
+  key dhcpupdate;
+}
+
+zone home {
+  primary {{ dhcp_ddns_server }};
+  key dhcpupdate;
+}
+{% endif %}
+
+subnet {{ dhcp_network_ip }} netmask {{ dhcp_subnet_mask }} {
+   range {{ dhcp_range.low }} {{ dhcp_range.high }};
+   filename "pxelinux.0";
+   next-server {{ ansible_default_ipv4.address }};
+}
+
+{% for host in dhcp_static_hosts %}
+host {{ host.name }} {
+   option host-name "{{ host.name }}";
+   hardware ethernet {{ host.mac }};
+   fixed-address {{ host.ip }};
+   ddns-hostname "{{ host.name }}";
+}
+
+{% endfor %}

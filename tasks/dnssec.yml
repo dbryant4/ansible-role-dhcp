@@ -1,0 +1,3 @@
+---
+- set_fact: dnssec_key="{{ansible_local.dnssec.key}}"
+  when: ansible_local is defined and ansible_local.dnssec.key is defined

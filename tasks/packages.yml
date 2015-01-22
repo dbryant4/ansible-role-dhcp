@@ -1,0 +1,5 @@
+---
+- name: install DHCPd packages
+  apt: "pkg={{ item }} state=present"
+  with_items:
+    - isc-dhcp-server

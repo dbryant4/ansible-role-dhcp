@@ -1,0 +1,3 @@
+---
+- name: ensure dhcpd enabled
+  service: "name={{ dhcp_service_name }} enabled=yes state=started"

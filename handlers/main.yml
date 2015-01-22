@@ -1,0 +1,6 @@
+---
+- name: restart dhcpd
+  service: "name={{ dhcp_service_name }} state=restarted"
+
+- name: validate dhcpd.conf
+  command: /usr/sbin/dhcpd -t
