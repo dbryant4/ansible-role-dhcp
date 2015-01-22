@@ -1,41 +1,48 @@
-# TFTP Role
+# DHCP Role
 
 [![Build
-Status](https://travis-ci.org/dbryant4/ansible-role-tftp.svg?branch=master)](https://travis-ci.org/dbryant4/ansible-role-tftp)
+Status](https://travis-ci.org/dbryant4/ansible-role-dhcp.svg?branch=master)](https://travis-ci.org/dbryant4/ansible-role-dhcp)
 
 ## Description
 
-This role manages the installation of TFTP on a Raspberry Pi, although it
-should be able to manage any other Debian based system. This role also
-sets up a basic PXE boot environment by downloading some files from a
-Centos 7 mirror and also pointing newly booted nodes to that mirror for
-the installation media.
-
-When this role completes successfuly and assuming you update your DHCP
-server's `next-server` option to point to the Ansible node, you will be
-able to boot a machine over the network using PXE and will be presented
-with a menu with the option to install CentOS 7. When you select CentOS
-7, it should start the installer to ask the user what packages to
-install, timezone, root password, etc.
+This role manages the installation of DHCPd on a Raspberry Pi, although it
+should be able to manage any other Debian based system. When paired with
+the [bind role](https://github.com/dbryant4/ansible-role-bind), this
+role will set a DHCP server which will automatically create A and PTR
+records for new hosts whcih recieve an IP address from this DHCP server.
 
 ## Provides
 
-1. An TFTP server
-2. Basic PXE boot environment (note: you still need to setup the
-   next-server on your DHCP server)
+1. An DHCP server
 
 ## Requires
 
-1. Ansible 1.7 or higher
+1. Ansible 1.6 or higher
 2. Raspberry Pi (possibly other Debian based systems)
 
 ## Variables
-- tftp_centos_mirror - the http URL for a CentOS server near you. This
-  can be over the internet or a local node on your network.
-- tftp_tftpboot_dir - the directory where to place all of the PXE boot
-  files.
-- tftp_ks_method - URL of the installation media for CentOS 7. Usually
-  the same as the `tftp_centos_mirror`.
+
+- dhcp_static_hosts - A hash defining static IP address assignments. `name`, `mac`, and `ip` are required for each static host.
+  - name - the hostname of the client
+  - mac - the mac address of the client using colons
+  - ip - the IP you want to assign the client.
+- dhcp_ddns_server - The DNS server where the DHCP server will report new clients. Use `localhost` if using the [bind role](https://github.com/dbryant4/ansible-role-bind).
+- dhcp_name_server - The IP of the DNS server clients should use.
+- dhcp_domain - The local domain to use. This is used to provide a
+  search domain to clients.
+- dhcp_subnet_mask: The subnet mask to use for the DHCP network. Default '255.255.255.0'
+- dhcp_range - This defines the range of IPs which will be assigned to
+  clients. The pool of addresses will range from `low` to `high`.
+  - low - the first IP to assign to requesting clients
+  - high - the last IP to assign to requesting clients
+- dhcp_network_ip - The IP representing the network. Ususally it's the
+  first IP in the subnet. Example: '192.168.101.0'
+- dhcp_router: The IP of the default route to pass on to clients.
+- dhcp_broadcast_ip: The broadcast IP for the DHCP network. Usually this is the last IP in the subnet. Example: '192.168.101.255'
+- dhcp_reverse_zone_name: The reverse zone name. This is used to report
+  to the DNS server when creating a new PTR record. Example: '101.168.192'
+- dhcp_service_name - The service name of the DHCPd service. This should
+  not be chaned. Default: 'isc-dhcp-server'
 
 ### Changing Variable Values
 
