@@ -3,7 +3,7 @@ default-lease-time 600;
 max-lease-time 7200;
 
 option subnet-mask {{ dhcp_subnet_mask }};
-option broadcast-address {{ 192.168.101.255 }};
+option broadcast-address {{ dhcp_broadcast_ip }};
 option routers {{ dhcp_router }};
 option domain-name-servers {{ dhcp_name_server }};
 option domain-search "{{ dhcp_domain }}";
