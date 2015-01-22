@@ -37,6 +37,7 @@ subnet {{ dhcp_network_ip }} netmask {{ dhcp_subnet_mask }} {
    next-server {{ ansible_default_ipv4.address }};
 }
 
+{% if dhcp_static_hosts is defined %}
 {% for host in dhcp_static_hosts %}
 host {{ host.name }} {
    option host-name "{{ host.name }}";
@@ -46,3 +47,4 @@ host {{ host.name }} {
 }
 
 {% endfor %}
+{% endif %}
