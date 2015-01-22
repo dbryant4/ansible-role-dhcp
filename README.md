@@ -59,13 +59,14 @@ Include this role in your plays and set varaibles as desired.
 
 ```yaml
 ---
-  name: tftp-servers
-  hosts: tftp-servers
+  name: dhcp-servers
+  hosts: dhcp-servers
   vars:
-    tftp_centos_mirror: 'http://mymirror.local/centos/7/x86_64'
-    tftp_ks_method:     'http://mymirror.local/centos/7/x86_64'
+    dhcp_range:
+      low: '192.168.0.50'
+      high: '192.168.0.100'
   roles:
-    - tftp
+    - dhcp
 ```
 
 ## Tests
