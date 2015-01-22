@@ -3,5 +3,3 @@
   gather_facts: yes
   roles:
     - ansible-role-dhcp
-  tasks:
-    - wait_for: path=/var/run/dhcpd.pid
