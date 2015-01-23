@@ -28,7 +28,7 @@ script:
   - >
     ansible-playbook -i tests/hosts tests/test.yml --connection=local --sudo --diff
     | tee /dev/tty
-    | grep -q 'changed=0.*failed=0'
+    | grep -q 'changed=1.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
