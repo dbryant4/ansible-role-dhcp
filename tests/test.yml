@@ -1,5 +1,22 @@
 ---
-- hosts: dhcp-servers
+- hosts: all
   gather_facts: yes
+
+  pre_tasks:
+    - apt: update_cache=yes
+    - apt: name=python-pip
+
   roles:
     - ansible-role-dhcp
+
+  post_tasks:
+    - command: 'service isc-dhcp-server status'
+      register: service_status
+      changed_when: False
+
+    - command: 'cat /etc/dhcp/dhcpd.conf'
+      changed_when: False
+
+    - assert:
+        that:
+          - "service_status.rc == 0"
