@@ -12,6 +12,6 @@ dhcp_range:
   low: '192.168.101.100'
   high: '192.168.101.200'
 dhcp_network_ip: '192.168.101.0'
-dhcp_router: '192.168.101.252'
+dhcp_router: '192.168.101.1'
 dhcp_broadcast_ip: '192.168.101.255'
 dhcp_reverse_zone_name: '101.168.192'
